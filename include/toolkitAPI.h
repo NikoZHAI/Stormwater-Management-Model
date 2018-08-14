@@ -589,6 +589,24 @@ void DLLEXPORT swmm_freeOutfallStats(SM_OutfallStats *outfallStats);
 int DLLEXPORT swmm_getLinkStats(int index, SM_LinkStats *linkStats);
 
 /**
+ @brief Get Link Length.
+ @param index The index of a link
+ @param[out] length Pointer to the target output value.
+ pre-allocated by the caller.
+ @return Error code
+*/
+int DLLEXPORT swmm_getLinkLength(int index, double *length);
+
+/**
+ @brief Get Xsect Diameter Parameters.
+ @param index The index of a link
+ @param[out] p0~p3 Pointer to the target output value.
+ pre-allocated by the caller.
+ @return Error code
+*/
+int DLLEXPORT swmm_getXsectDiameters(int index, double *p0, double *p1, double *p2, double *p3);
+
+/**
  @brief Get pump statistics.
  @param index The index of a pump
  @param[out] pumpStats The link Stats struct (see @ref SM_PumpStats). 
@@ -664,12 +682,29 @@ int DLLEXPORT swmm_setNodeInflow(int index, double flowrate);
 int DLLEXPORT swmm_setOutfallStage(int index, double stage);
 
 /**
-@brief Set a total precipitation intensity to the gage.
-@param index The gage index.
-@param total_precip The new total precipitation intensity.
-@return Error code
+ @brief Set a total precipitation intensity to the gage.
+ @param index The gage index.
+ @param total_precip The new total precipitation intensity.
+ @return Error code
 */
 int DLLEXPORT swmm_setGagePrecip(int index, double total_precip);
+
+/**
+ @brief Set diameter parameters to the cross-section bound to Link[index]
+ @param index The Link index.
+ @param values The cross-section diameters, p1 ~ p4.
+ @return Error code
+*/
+int DLLEXPORT swmm_setXsectDiameters(int index, double values[4]);
+
+/**
+ @brief Change the type of the cross-section bound to Link[index]
+ @param index The Link index.
+ @param type The type code of the desired shape of the cross-section.
+ @param values The cross-section diameters, p1 ~ p4.
+ @return Error code
+*/
+int DLLEXPORT swmm_changeXsectType(int index, int type, double values[4]);
 
 /**
 @brief Helper function to free memory array allocated in SWMM.

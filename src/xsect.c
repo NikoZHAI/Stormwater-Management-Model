@@ -216,7 +216,13 @@ int xsect_setParams(TXsect *xsect, int type, double p[], double ucf)
     double aMax, theta;
 
     if ( type != DUMMY && p[0] <= 0.0 ) return FALSE;
-    xsect->type  = type;
+    xsect->type = type;
+
+   // Store the shape parameters 1~4 !! For the paticular needs of our project MOPRISM !! See objects.h
+    xsect->p0 = p[0];
+    xsect->p1 = p[1];
+    xsect->p2 = p[2];
+    xsect->p3 = p[3];
     switch ( xsect->type )
     {
     case DUMMY:

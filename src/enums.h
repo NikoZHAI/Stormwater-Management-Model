@@ -108,6 +108,7 @@
 //-------------------------------------
 // Cross section shape types
 //-------------------------------------
+ #define MAX_XSECT_TYPES 25
  enum XsectType {
       DUMMY,                           // 0      
       CIRCULAR,                        // 1      closed

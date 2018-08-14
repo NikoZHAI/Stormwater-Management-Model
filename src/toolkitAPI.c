@@ -1186,6 +1186,72 @@ int DLLEXPORT swmm_getLinkStats(int index, SM_LinkStats *linkStats)
 }
 
 
+int DLLEXPORT swmm_getLinkLength(int index, double *length)
+//
+// Input:   index = Index of desired Link ID
+//          *length = Pointer to the target output value
+// Return:  API Error
+// Purpose: Get Link Length
+{
+    int errcode = 0;
+    // Check if Open
+    if(swmm_IsOpenFlag() == FALSE)
+    {
+        errcode = ERR_API_INPUTNOTOPEN;
+    }
+    // Check if object index is within bounds
+    else if (index < 0 || index >= Nobjects[LINK])
+    {
+        errcode = ERR_API_OBJECT_INDEX;
+    }
+    else
+    {   
+        double l = link_getLength(index);
+        if (l < 0.0)
+        {
+            errcode = ERR_LENGTH;
+            return(errcode);
+        }
+
+        *length = l * UCF(LENGTH);
+        // re-validated link
+        //link_validate(index);
+    }
+
+    return(errcode);
+}
+
+
+int DLLEXPORT swmm_getXsectDiameters(int index, double *p0, double *p1, double *p2, double *p3)
+//
+// Input:   index = Index of desired ID
+//          p0~p3 = Cross-section diameter parameters
+// Return:  API Error
+// Purpose: Get Link Parameter
+{
+    int errcode = 0;
+    // Check if Open
+    if(swmm_IsOpenFlag() == FALSE)
+    {
+        errcode = ERR_API_INPUTNOTOPEN;
+    }
+    // Check if object index is within bounds
+    else if (index < 0 || index >= Nobjects[LINK])
+    {
+        errcode = ERR_API_OBJECT_INDEX;
+    }
+    else
+    {   
+        *p0 = Link[index].xsect.p0;
+        *p1 = Link[index].xsect.p1;
+        *p2 = Link[index].xsect.p2;
+        *p3 = Link[index].xsect.p3;
+    }
+
+    return(errcode);
+}
+
+
 int DLLEXPORT swmm_getPumpStats(int index, SM_PumpStats *pumpStats)
 //
 // Output:  Pump Link Stats Structure (SM_PumpStats)
@@ -1523,6 +1589,79 @@ int DLLEXPORT swmm_setGagePrecip(int index, double total_precip)
     }
     return(errcode);
 }
+
+
+int DLLEXPORT swmm_setXsectDiameters(int index, double values[4])
+//
+// Input:   index = Index of desired ID
+//          param = Parameter desired (Based on enum SM_XsectProperty)
+//          value = value to be input
+// Return:  API Error
+// Purpose: Sets Link Parameter
+{
+    int errcode = 0;
+    // Check if Open
+    if(swmm_IsOpenFlag() == FALSE)
+    {
+        errcode = ERR_API_INPUTNOTOPEN;
+    }
+    // Check if object index is within bounds
+    else if (index < 0 || index >= Nobjects[LINK])
+    {
+        errcode = ERR_API_OBJECT_INDEX;
+    }
+    else
+    {   
+        int type = Link[index].xsect.type;
+
+        if ( !(xsect_setParams(&Link[index].xsect, type, values, UCF(LENGTH))) )
+         {
+             errcode = ERR_API_XSECT_PARAM;
+         }
+        // re-validated link
+        //link_validate(index);
+    }
+
+    return(errcode);
+}
+
+
+int DLLEXPORT swmm_changeXsectType(int index, int type, double values[4])
+//
+// Input:   index = Index of desired ID
+//          param = Parameter desired (Based on enum SM_XsectProperty)
+//          value = value to be input
+// Return:  API Error
+// Purpose: Sets Link Parameter
+{
+    int errcode = 0;
+    // Check if Open
+    if(swmm_IsOpenFlag() == FALSE)
+    {
+        errcode = ERR_API_INPUTNOTOPEN;
+    }
+    // Check if object index is within bounds
+    else if (index < 0 || index >= Nobjects[LINK])
+    {
+        errcode = ERR_API_OBJECT_INDEX;
+    }
+    else if (type >= MAX_XSECT_TYPES)
+    {
+        errcode = ERR_API_XSECT_TYPE;
+    }
+    else
+    {   
+        if ( !(xsect_setParams(&Link[index].xsect, type, values, UCF(LENGTH))) )
+         {
+             errcode = ERR_API_XSECT_PARAM;
+         }
+        // re-validated link
+        //link_validate(index);
+    }
+
+    return(errcode);
+}
+
 
 //-------------------------------
 // Utility Functions

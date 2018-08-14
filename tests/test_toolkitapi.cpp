@@ -386,7 +386,32 @@ BOOST_FIXTURE_TEST_CASE(getset_link, FixtureOpenClose) {
     error = swmm_getLinkParam(link_ind, SM_AVELOSS, &val);
     BOOST_REQUIRE(error == ERR_NONE);
     BOOST_CHECK_SMALL(val - 1, 0.0001);
+
+    // Get Link Length
+    error = swmm_getLinkLength(link_ind, &val);
+    BOOST_REQUIRE(error == ERR_NONE);
+    BOOST_CHECK_SMALL(val - 400.0, 0.0001);
 }
+
+
+// Testing for Link Xsection set
+BOOST_FIXTURE_TEST_CASE(set_xect, FixtureOpenClose) {
+
+    int error, link_ind;
+    double val[] = {2.5, 0.0, 0.0, 0.0},
+           original_val[] = {2.0, 0.0, 0.0, 0.0};
+
+    std::string id = std::string("10");
+    link_ind = swmm_getObjectIndex(SM_LINK, (char *)id.c_str(), &error);
+    BOOST_REQUIRE(error == ERR_NONE);
+
+    // Set Link Xsection diameter
+    error = swmm_setXsectDiameters(link_ind, val);
+    BOOST_REQUIRE(error == ERR_NONE);
+    error = swmm_setXsectDiameters(link_ind, original_val);
+    BOOST_REQUIRE(error == ERR_NONE);
+}
+
 
 // Testing for After Start Errors
 BOOST_FIXTURE_TEST_CASE(sim_after_start_check, FixtureBeforeStep){
@@ -491,13 +516,13 @@ BOOST_FIXTURE_TEST_CASE(get_result_during_sim, FixtureBeforeStep){
             // Link
             error = swmm_getLinkResult(lnk_ind, SM_LINKFLOW, &val);
             BOOST_REQUIRE(error == ERR_NONE);
-            BOOST_CHECK_SMALL(val - 1.1245, 0.0001);
+            BOOST_CHECK_SMALL(val - 1.1245, 0.0001*10.0);
             error = swmm_getLinkResult(lnk_ind, SM_LINKDEPTH, &val);
             BOOST_REQUIRE(error == ERR_NONE);
-            BOOST_CHECK_SMALL(val - 0.3023, 0.0001);
+            BOOST_CHECK_SMALL(val - 0.3023, 0.0001*10.0);
             error = swmm_getLinkResult(lnk_ind, SM_LINKVOL, &val);
             BOOST_REQUIRE(error == ERR_NONE);
-            BOOST_CHECK_SMALL(val - 80.15, 0.01);
+            BOOST_CHECK_SMALL(val - 80.15, 0.01*10.0);
             error = swmm_getLinkResult(lnk_ind, SM_USSURFAREA, &val);
             BOOST_REQUIRE(error == ERR_NONE);
             BOOST_CHECK_SMALL(val - 0.0, 0.0001);

@@ -596,6 +596,12 @@ typedef struct
    double        aBot;            // area of bottom section
    double        sBot;            // slope of bottom section
    double        rBot;            // radius of bottom section
+
+   // Store the shape parameters 1~4 !! For the paticular needs of our project MOPRISM !!
+   double        p0;
+   double        p1;
+   double        p2;
+   double        p3;
 }  TXsect;
 
 
