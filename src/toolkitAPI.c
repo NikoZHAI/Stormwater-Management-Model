@@ -1222,6 +1222,34 @@ int DLLEXPORT swmm_getLinkLength(int index, double *length)
 }
 
 
+int DLLEXPORT swmm_getXsectType(int index, int *type)
+//
+// Input:   index = Index of desired ID
+//          type = Pointer to the target output (Based on enum SM_XsectProperty)
+// Return:  API Error
+// Purpose: Get Link Xsect Type
+{
+    int errcode = 0;
+    // Check if Open
+    if(swmm_IsOpenFlag() == FALSE)
+    {
+        errcode = ERR_API_INPUTNOTOPEN;
+    }
+    // Check if object index is within bounds
+    else if (index < 0 || index >= Nobjects[LINK])
+    {
+        errcode = ERR_API_OBJECT_INDEX;
+    }
+    else
+    {   
+        int t = Link[index].xsect.type;
+        *type = t;
+    }
+
+    return(errcode);
+}
+
+
 int DLLEXPORT swmm_getXsectDiameters(int index, double *p0, double *p1, double *p2, double *p3)
 //
 // Input:   index = Index of desired ID

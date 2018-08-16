@@ -597,6 +597,15 @@ int DLLEXPORT swmm_getLinkStats(int index, SM_LinkStats *linkStats);
 */
 int DLLEXPORT swmm_getLinkLength(int index, double *length);
 
+/*
+ @brief Get Link Xsect Type.
+ @param index The index of a link
+ @param[out] type Pointer to the target output
+ pre-allocated by the caller.
+ @return Error code
+*/
+int DLLEXPORT swmm_getXsectType(int index, int *type);
+
 /**
  @brief Get Xsect Diameter Parameters.
  @param index The index of a link
